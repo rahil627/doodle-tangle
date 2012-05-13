@@ -10,8 +10,11 @@
 @class ButtonGroup;
 
 @interface GameManager : NSObject {
-
+    
 }
+
+@property (nonatomic, readwrite) int score;
+@property (nonatomic, readwrite) int highScore;
 
 + (GameManager*)sharedGameManager;
 

@@ -23,6 +23,10 @@
     NSArray* levelFileNames1;
     NSArray* levelFileNames2;
     NSArray* levelFileNames3;
+    CCLabelTTF *scoreLabel;
+    CCLabelTTF *highScoreLabel;
+    CCLabelTTF *currentScoreLabel;
+    float allTimer;
 }
 
 +(CCScene *) scene;

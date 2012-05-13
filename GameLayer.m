@@ -8,6 +8,7 @@
 
 #import "GameLayer.h"
 #import "Player.h"
+#import "GameManager.h"
 
 @implementation GameLayer
 
@@ -30,6 +31,7 @@
     levelState = 0;
     moveSpeed = 2;
     spawnTime = 20;
+    allTimer = 0;
     
     CGSize s = [CCDirector sharedDirector].winSize;
     
@@ -59,6 +61,17 @@
     levelFileNames3 = [[NSArray alloc] initWithObjects:@"Curve.png", @"Curve2.png", @"Trap.png", @"SafeSpaces.png",
                        @"Backward.png", @"Staircase", nil];
     
+    // scores
+    NSString* scoreString = [NSString stringWithFormat:@"last score: %i", [[GameManager sharedGameManager] score]];
+    scoreLabel = [CCLabelTTF labelWithString:scoreString fontName:@"Marker Felt" fontSize:32];
+    scoreLabel.position = ccp(s.width / 2 , (scoreLabel.contentSize.height / 2) * 4);
+    [self addChild: scoreLabel z:0];
+    
+    NSString* highScoreString = [NSString stringWithFormat:@"high score: %i", [[GameManager sharedGameManager] score]];
+    highScoreLabel = [CCLabelTTF labelWithString:highScoreString fontName:@"Marker Felt" fontSize:32];
+    highScoreLabel.position = ccp(s.width / 2 , highScoreLabel.contentSize.height / 2);
+    [self addChild: highScoreLabel z:0];
+        
     [self schedule:@selector(update:)];
     
     return self;
@@ -79,13 +92,24 @@
     // game state
     if (state == 1) {
         timer -= dt;
+        allTimer += dt;
         //CCLOG(@"timer: %f", timer);
         
         [self moveDoodles];
         [self checkCollisions];
+        int allTimerInt = allTimer;
+        currentScoreLabel.string = [NSString stringWithFormat:@"score: %i", allTimerInt];
         
         // if number of players < total, restart
         if ([self getPlayerCount] < /*totalPlayerCount*/ 3) {
+            
+            // set score
+            [GameManager sharedGameManager].score = allTimer;
+            if ([GameManager sharedGameManager].highScore < [GameManager sharedGameManager].score) {
+                [GameManager sharedGameManager].highScore = [GameManager sharedGameManager].score;
+            }
+            
+            // restart
             [[CCDirector sharedDirector] replaceScene:[GameLayer scene]];
         }
         
@@ -149,6 +173,17 @@
     self.isTouchEnabled = false;
     totalPlayerCount = [self getPlayerCount];
     timer = 1; // todo: 5
+    
+    [self removeChild:scoreLabel cleanup:YES];
+    [self removeChild:highScoreLabel cleanup:YES];
+    
+    
+    CGSize s = [CCDirector sharedDirector].winSize;
+    
+    NSString* currentScoreString = [NSString stringWithFormat:@"high score: %i", [[GameManager sharedGameManager] score]];
+    currentScoreLabel = [CCLabelTTF labelWithString:currentScoreString fontName:@"Marker Felt" fontSize:32];
+    currentScoreLabel.position = ccp(s.width / 2 , currentScoreLabel.contentSize.height / 2);
+    [self addChild: currentScoreLabel z:0];
     
     state = 1;
 }

@@ -10,6 +10,8 @@
 
 static GameManager* _sharedGameManager = nil;
 
+@synthesize score, highScore;
+
 +(GameManager*)sharedGameManager 
 {
     @synchronized([GameManager class])                             
@@ -39,6 +41,10 @@ static GameManager* _sharedGameManager = nil;
     
     // Game Manager initialized
     CCLOG(@"Game Manager Singleton, init");
+    
+    score = 0;
+    highScore = 0;
+    
     return self;
 }
 
