@@ -29,6 +29,7 @@
     timer = 0;
     levelState = 0;
     moveSpeed = 2;
+    spawnTime = 20;
     
     CGSize s = [CCDirector sharedDirector].winSize;
     
@@ -53,6 +54,10 @@
     
     // create file name string array
     fileNames = [[NSArray alloc] initWithObjects:@"Curve.png", @"Trap.png", @"OneOpening.png", @"TwoOpenings.png", nil];
+    levelFileNames1 = [[NSArray alloc] initWithObjects:@"Blob.png", @"TwoOpenings.png", @"TwoOpenings2.png", nil];
+    levelFileNames2 = [[NSArray alloc] initWithObjects:@"OneOpening.png", @"OneOpening2.png", @"TwoToOne.png", nil];
+    levelFileNames3 = [[NSArray alloc] initWithObjects:@"Curve.png", @"Curve2.png", @"Trap.png", @"SafeSpaces.png",
+                       @"Backward.png", @"Staircase", nil];
     
     [self schedule:@selector(update:)];
     
@@ -90,29 +95,25 @@
                 case 0:
                     // do stuff
                     label.string = @"avoid the doodles"; //[NSString stringWithFormat:@"%@\r%@\r%@", @"avoid the doodles", @"work together", @"good luck"];
-                    timer = 1; // todo: 5
+                    timer += 1; // todo: 5
                     break;
                 case 1:
                     //label.visible = NO;
                     [self removeChild:label cleanup:YES];
-                    timer = 1; // todo: 5
+                    timer += 1; // todo: 5
                     break;
-                    /*
                 case 2:
-                    [self addDoodle:@"Blob.png"];
-                    timer = 20;
+                    //[self addDoodle:@"Backward.png"];
+                    [self addDoodle:[self getRandomIndex:levelFileNames1]];
+                    timer += spawnTime;
                     break;
                 case 3:
-                    [self addDoodle:@"TwoOpenings.png"];
-                    timer = 20;
+                    [self addDoodle:[self getRandomIndex:levelFileNames2]];
+                    timer += spawnTime;
                     break;
-                     */
                 default:
-                    [self addDoodle:[self getRandomImageString]];
-                    timer = 20; //todo: spawn speed
-                    // randomly go through all doodles
-                    // increase speed over time
-                    // add timer
+                    [self addDoodle:[self getRandomIndex:levelFileNames3]];
+                    timer = spawnTime;
                     break;
             }
             levelState++;
@@ -187,9 +188,9 @@
     return count;
 }
 
-- (NSString*) getRandomImageString {
-    NSUInteger randomIndex = arc4random() % [fileNames count];
-    return [fileNames objectAtIndex:randomIndex];
+- (NSString*) getRandomIndex :(NSArray *)fileNameArray {
+    NSUInteger randomIndex = arc4random() % [fileNameArray count];
+    return [fileNameArray objectAtIndex:randomIndex];
 }
 
 

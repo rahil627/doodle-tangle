@@ -19,6 +19,10 @@
     int levelState;
     int moveSpeed;
     NSArray* fileNames;
+    float spawnTime; //constant
+    NSArray* levelFileNames1;
+    NSArray* levelFileNames2;
+    NSArray* levelFileNames3;
 }
 
 +(CCScene *) scene;
@@ -31,6 +35,6 @@
 - (int) getPlayerCount;
 - (void) addDoodle :(NSString*)fileName;
 - (void) moveDoodles;
-- (NSString*) getRandomImageString;
+- (NSString*) getRandomIndex :(NSArray *)fileNameArray;
 
 @end
