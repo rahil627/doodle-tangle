@@ -18,7 +18,6 @@
     int totalPlayerCount;
     int levelState;
     int moveSpeed;
-    NSArray* fileNames;
     float spawnTime; //constant
     NSArray* levelFileNames1;
     NSArray* levelFileNames2;

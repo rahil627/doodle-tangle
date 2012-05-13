@@ -55,11 +55,10 @@
     _rt.visible = NO; // turn on to test
     
     // create file name string array
-    fileNames = [[NSArray alloc] initWithObjects:@"Curve.png", @"Trap.png", @"OneOpening.png", @"TwoOpenings.png", nil];
     levelFileNames1 = [[NSArray alloc] initWithObjects:@"Blob.png", @"TwoOpenings.png", @"TwoOpenings2.png", nil];
     levelFileNames2 = [[NSArray alloc] initWithObjects:@"OneOpening.png", @"OneOpening2.png", @"TwoToOne.png", nil];
     levelFileNames3 = [[NSArray alloc] initWithObjects:@"Curve.png", @"Curve2.png", @"Trap.png", @"SafeSpaces.png",
-                       @"Backward.png", @"Staircase", nil];
+                       @"Backward.png", @"Staircase.png", nil];
     
     // scores
     NSString* scoreString = [NSString stringWithFormat:@"last score: %i", [[GameManager sharedGameManager] score]];
@@ -97,13 +96,15 @@
         
         [self moveDoodles];
         [self checkCollisions];
+        
+        // update score
         int allTimerInt = allTimer;
         currentScoreLabel.string = [NSString stringWithFormat:@"score: %i", allTimerInt];
         
         // if number of players < total, restart
         if ([self getPlayerCount] < /*totalPlayerCount*/ 3) {
             
-            // set score
+            // set high score
             [GameManager sharedGameManager].score = allTimer;
             if ([GameManager sharedGameManager].highScore < [GameManager sharedGameManager].score) {
                 [GameManager sharedGameManager].highScore = [GameManager sharedGameManager].score;
@@ -127,7 +128,7 @@
                     timer += 1; // todo: 5
                     break;
                 case 2:
-                    //[self addDoodle:@"Backward.png"];
+                    //[self addDoodle:@"Staircase.png"];
                     [self addDoodle:[self getRandomIndex:levelFileNames1]];
                     timer += spawnTime;
                     break;
@@ -237,46 +238,7 @@
 // touches
 
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { // Began/Moved/Ended/Cancelled
-	/*
-     //iteration method
-     for ( UITouch* touch in touches ) {
-     CGPoint location = [touch locationInView:[touch view]];
-     location = [[CCDirector sharedDirector] convertToGL:location];
-     
-     //code
-	 */
-	/*
-     CGRect spriteRect = [sprite boundingBox];
-     
-     UITouch *touch = [touches anyObject];
-     
-     CGPoint location = [touch previousLocationInView:[touch view]];
-     location = [[CCDirector sharedDirector] convertToGL:location];
-     
-     if (CGRectContainsPoint(spriteRect, location))
-     {
-     id move = [CCMoveBy actionWithDuration:0.05 position:10];
-     [sprite runAction:[CCRepeatForever actionWithAction:move]];
-     }
-     */
-	
-	/*
-	 //index-array method
-	 
-	 NSArray *touchArray = [touches allObjects];
-	 
-	 UITouch *touchOne = [touchArray objectAtIndex:0];
-	 CGPoint locationOne = [touchOne locationInView:[touchOne location]];
-	 
-	 //CODE
-	 
-	 if ( [touchArray count] > 1 ) {
-	 UITouch *touchTwo = [touchArray objectAtIndex:1];
-	 //Location, CODE
-	 }
-	 
-	 //And so forth...
-	 */
+
 }
 
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -289,8 +251,10 @@
         CGPoint touchPoint = [touch locationInView:[touch view]];
         touchPoint = [[CCDirector sharedDirector] convertToGL:touchPoint];
         
-        Player* player = [Player init :touchPoint];
-        [self addChild:player];
+        if ([self getPlayerCount] < 11) {
+            Player* player = [Player init :touchPoint];
+            [self addChild:player];
+        }
     }
 }
 
