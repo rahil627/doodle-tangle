@@ -71,6 +71,15 @@
     highScoreLabel = [CCLabelTTF labelWithString:highScoreString fontName:@"Marker Felt" fontSize:32];
     highScoreLabel.position = ccp(s.width / 2 , highScoreLabel.contentSize.height / 2);
     [self addChild: highScoreLabel z:0];
+    
+    // clear button
+	CCLabelTTF *clearLabel = [CCLabelTTF labelWithString:@"clear" fontName:@"Marker Felt" fontSize:32];
+    CCMenuItemLabel* clearButton = [CCMenuItemLabel itemWithLabel:clearLabel target:self selector:@selector(clearPlayers)];
+    clearButton.position = ccp(s.width - 100, clearLabel.contentSize.height / 2);
+    //clearButton.isEnabled = YES;
+    menu2 = [CCMenu menuWithItems:clearButton, nil];
+    menu2.position = CGPointZero;
+    [self addChild:menu2];
         
     [self schedule:@selector(update:)];
     
@@ -85,8 +94,7 @@
     // ready state
     if (state == 0) {
         // if number of players >= 3, allow to start game
-        if ([self getPlayerCount] >= 3)
-            startButton.isEnabled = YES;
+        startButton.isEnabled = ([self getPlayerCount] >= 3);
     }
     
     // game state
@@ -178,6 +186,7 @@
     
     [self removeChild:scoreLabel cleanup:YES];
     [self removeChild:highScoreLabel cleanup:YES];
+    [self removeChild:menu2 cleanup:YES];
     
     
     CGSize s = [CCDirector sharedDirector].winSize;
@@ -228,6 +237,14 @@
 - (NSString*) getRandomIndex :(NSArray *)fileNameArray {
     NSUInteger randomIndex = arc4random() % [fileNameArray count];
     return [fileNameArray objectAtIndex:randomIndex];
+}
+
+- (void) clearPlayers {
+    for(id child in self.children) {
+        if([child isKindOfClass:[Player class]]) {
+            [self removeChild:child cleanup:YES];
+        }
+    }
 }
 
 

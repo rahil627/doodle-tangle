@@ -26,6 +26,7 @@
     CCLabelTTF *highScoreLabel;
     CCLabelTTF *currentScoreLabel;
     float allTimer;
+    CCMenu* menu2;
 }
 
 +(CCScene *) scene;
