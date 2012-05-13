@@ -17,6 +17,8 @@
     CCRenderTexture* _rt;
     int totalPlayerCount;
     int levelState;
+    int moveSpeed;
+    NSArray* fileNames;
 }
 
 +(CCScene *) scene;
@@ -29,5 +31,6 @@
 - (int) getPlayerCount;
 - (void) addDoodle :(NSString*)fileName;
 - (void) moveDoodles;
+- (NSString*) getRandomImageString;
 
 @end

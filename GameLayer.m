@@ -28,6 +28,7 @@
     state = 0;
     timer = 0;
     levelState = 0;
+    moveSpeed = 2;
     
     CGSize s = [CCDirector sharedDirector].winSize;
     
@@ -38,7 +39,7 @@
 	// add start button
 	CCLabelTTF *startLabel = [CCLabelTTF labelWithString:@"tap to start" fontName:@"Marker Felt" fontSize:32];
     startButton = [CCMenuItemLabel itemWithLabel:startLabel target:self selector:@selector(beginGame)];
-    startButton.position = ccp(s.width / 2, s.height / 2);
+    startButton.position = ccp(s.width / 2, s.height - label.contentSize.height * 2);
     startButton.isEnabled = NO;
     menu = [CCMenu menuWithItems:startButton, nil];
     menu.position = CGPointZero;
@@ -49,6 +50,9 @@
     _rt.position = ccp(s.width*0.5f,s.height*0.1f);
     [self addChild:_rt];
     _rt.visible = NO; // turn on to test
+    
+    // create file name string array
+    fileNames = [[NSArray alloc] initWithObjects:@"Curve.png", @"Trap.png", @"OneOpening.png", @"TwoOpenings.png", nil];
     
     [self schedule:@selector(update:)];
     
@@ -62,8 +66,8 @@
     
     // ready state
     if (state == 0) {
-        // if number of players > 1, allow to start game
-        if ([self getPlayerCount] > 1)
+        // if number of players >= 3, allow to start game
+        if ([self getPlayerCount] >= 3)
             startButton.isEnabled = YES;
     }
     
@@ -76,7 +80,7 @@
         [self checkCollisions];
         
         // if number of players < total, restart
-        if ([self getPlayerCount] < /*totalPlayerCount*/ 2) {
+        if ([self getPlayerCount] < /*totalPlayerCount*/ 3) {
             [[CCDirector sharedDirector] replaceScene:[GameLayer scene]];
         }
         
@@ -93,23 +97,19 @@
                     [self removeChild:label cleanup:YES];
                     timer = 1; // todo: 5
                     break;
+                    /*
                 case 2:
-                    [self addDoodle:@"Trap.png"];
+                    [self addDoodle:@"Blob.png"];
                     timer = 20;
                     break;
                 case 3:
-                    [self addDoodle:@"OneOpening.png"];
-                    timer = 20;
-                    break;
-                case 4:
                     [self addDoodle:@"TwoOpenings.png"];
                     timer = 20;
                     break;
-                case 5:
-                    [self addDoodle:@"Trap.png"];
-                    timer = 20;
-                    break;
+                     */
                 default:
+                    [self addDoodle:[self getRandomImageString]];
+                    timer = 20; //todo: spawn speed
                     // randomly go through all doodles
                     // increase speed over time
                     // add timer
@@ -133,7 +133,7 @@
         if([child isKindOfClass:[CCSprite class]]) {
             CCSprite* sprite = child;
             if (sprite.tag == 1)
-                sprite.position = ccp(sprite.position.x, sprite.position.y - 1);
+                sprite.position = ccp(sprite.position.x, sprite.position.y - moveSpeed);
         }
     }
 }
@@ -185,6 +185,11 @@
         }
     }
     return count;
+}
+
+- (NSString*) getRandomImageString {
+    NSUInteger randomIndex = arc4random() % [fileNames count];
+    return [fileNames objectAtIndex:randomIndex];
 }
 
 
