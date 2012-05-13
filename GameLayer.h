@@ -15,7 +15,6 @@
     CCMenuItemLabel *startButton;
     float timer;
     CCRenderTexture* _rt;
-    CCSprite *lava; //todo: temp
     int totalPlayerCount;
     int levelState;
 }
@@ -28,5 +27,7 @@
 - (void) checkCollisions;
 - (BOOL) isCollisionBetweenSpriteA:(CCSprite*)spr1 spriteB:(CCSprite*)spr2 pixelPerfect:(BOOL)pp;
 - (int) getPlayerCount;
+- (void) addDoodle :(NSString*)fileName;
+- (void) moveDoodles;
 
 @end

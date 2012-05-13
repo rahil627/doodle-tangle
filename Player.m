@@ -16,15 +16,17 @@
 }
 
 - (id)init :(CGPoint)position {
-	if (!(self = [super init]))//WithFile:@"square.png"])) // todo: might need WithFile
+	if (!(self = [super initWithFile:@"square.png"])) // todo: might need WithFile
 		return nil;
+    
+    //[[self texture] setAliasTexParameters];
     
     //self.isTouchEnabled = YES;
     
     self.position = position;
     
     // random color circle
-    [self setTextureRect:CGRectMake(-10, -10, 20, 20)];
+    //[self setTextureRect:CGRectMake(-10, -10, 20, 20)];
     [self setColor:ccc3(CCRANDOM_0_1() * 255, CCRANDOM_0_1() * 255, CCRANDOM_0_1() * 255)];
     
     //self.position = position;

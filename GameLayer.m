@@ -33,7 +33,7 @@
     
     label = [CCLabelTTF labelWithString:@"tap anywhere once to join" fontName:@"Marker Felt" fontSize:32];
     label.position = ccp(s.width / 2 , s.height - label.contentSize.height / 2);
-    [self addChild: label z:0 tag:0];
+    [self addChild: label z:0];
     
 	// add start button
 	CCLabelTTF *startLabel = [CCLabelTTF labelWithString:@"tap to start" fontName:@"Marker Felt" fontSize:32];
@@ -44,11 +44,11 @@
     menu.position = CGPointZero;
     [self addChild:menu];
     
-    //todo: temp
-    lava = [CCSprite spriteWithFile:@"Icon.png"];
-    lava.position = ccp(s.width / 2, s.height * 3 / 4);
-    [self addChild:lava];
-    
+    // create render texture and make it visible for testing purposes
+    _rt = [CCRenderTexture renderTextureWithWidth:s.width height:s.height];
+    _rt.position = ccp(s.width*0.5f,s.height*0.1f);
+    [self addChild:_rt];
+    _rt.visible = NO; // turn on to test
     
     [self schedule:@selector(update:)];
     
@@ -62,21 +62,21 @@
     
     // ready state
     if (state == 0) {
-        // if number of players >= 1, allow to start game
-        if ([self getPlayerCount] >= 1)
+        // if number of players > 1, allow to start game
+        if ([self getPlayerCount] > 1)
             startButton.isEnabled = YES;
     }
     
     // game state
     if (state == 1) {
-        timer += dt;
+        timer -= dt;
+        //CCLOG(@"timer: %f", timer);
         
-        lava.position = ccp(lava.position.x, lava.position.y - 1);
-        
+        [self moveDoodles];
         [self checkCollisions];
         
         // if number of players < total, restart
-        if ([self getPlayerCount] < totalPlayerCount) {
+        if ([self getPlayerCount] < /*totalPlayerCount*/ 2) {
             [[CCDirector sharedDirector] replaceScene:[GameLayer scene]];
         }
         
@@ -85,23 +85,53 @@
             switch (levelState) {
                 case 0:
                     // do stuff
+                    label.string = @"avoid the doodles"; //[NSString stringWithFormat:@"%@\r%@\r%@", @"avoid the doodles", @"work together", @"good luck"];
+                    timer = 1;
                     break;
-                    
+                case 1:
+                    //label.visible = NO;
+                    [self removeChild:label cleanup:YES];
+                    timer = 1;
+                    break;
+                case 2:
+                    [self addDoodle:@"Trap.png"];
+                    timer = 20;
+                    break;
+                case 3:
+                    [self addDoodle:@"OneOpening.png"];
+                    timer = 20;
+                    break;
+                case 4:
+                    [self addDoodle:@"TwoOpenings.png"];
+                    timer = 20;
+                    break;
+                case 5:
+                    [self addDoodle:@"Trap.png"];
+                    timer = 20;
+                    break;
                 default:
                     break;
             }
-            if () {
-                label.string = @"avoid the the doodles %@\n work together %@\n good luck";
-            }
-            
-            if (timer >= 10 && timer <= 12) {
-                label.visible = NO;
-            }
-            
-            if (timer >= 10 && timer <= 12) {
-                //lava.texture = [CCTexture2D init
-                [lava setTexture:[[CCTextureCache sharedTextureCache] addImage:@"OneOpening.png"]];
-            }
+            levelState++;
+        }
+    }
+}
+
+- (void) addDoodle :(NSString*)fileName {
+    CGSize s = [CCDirector sharedDirector].winSize;
+    
+    CCSprite* doodle = [CCSprite spriteWithFile:fileName];
+    //[[doodle texture] setAliasTexParameters];
+    doodle.position = ccp(s.width / 2, s.height + doodle.contentSize.height / 2);
+    [self addChild:doodle z:0 tag:1];
+}
+
+- (void) moveDoodles {
+    for(id child in self.children) {
+        if([child isKindOfClass:[CCSprite class]]) {
+            CCSprite* sprite = child;
+            if (sprite.tag == 1)
+                sprite.position = ccp(sprite.position.x, sprite.position.y - 1);
         }
     }
 }
@@ -123,9 +153,23 @@
 - (void) checkCollisions {
     for(id child in self.children) {
         if([child isKindOfClass:[Player class]]) {
+            
+            
+            for(id child2 in self.children) {
+                if([child2 isKindOfClass:[CCSprite class]]) {
+                    CCSprite* sprite = child2;
+                    if (sprite.tag == 1) {
+                        if ([self isCollisionBetweenSpriteA:child spriteB:sprite pixelPerfect:YES]) {
+                            //[self removeChild:child cleanup:YES];
+                            CCLOG(@"collision detected");
+                        }
+                    }
+                }
+            }
+            
             //Player* player = child;
-            if ([self isCollisionBetweenSpriteA:child spriteB:lava pixelPerfect:YES])
-                [self removeChild:child cleanup:YES];
+            //if ([self isCollisionBetweenSpriteA:child spriteB:lava pixelPerfect:YES])
+            //    [self removeChild:child cleanup:YES];
             
         }
     }
