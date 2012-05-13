@@ -111,6 +111,9 @@
 	// Removes the startup flicker
 	[self removeStartupFlicker];
 	
+    // begin music, added by Rahil
+    [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"music.mp3"];
+    
 	// Run the intro Scene
 	[[CCDirector sharedDirector] runWithScene: [GameLayer scene]];
 }

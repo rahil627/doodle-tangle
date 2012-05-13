@@ -86,12 +86,12 @@
                 case 0:
                     // do stuff
                     label.string = @"avoid the doodles"; //[NSString stringWithFormat:@"%@\r%@\r%@", @"avoid the doodles", @"work together", @"good luck"];
-                    timer = 1;
+                    timer = 1; // todo: 5
                     break;
                 case 1:
                     //label.visible = NO;
                     [self removeChild:label cleanup:YES];
-                    timer = 1;
+                    timer = 1; // todo: 5
                     break;
                 case 2:
                     [self addDoodle:@"Trap.png"];
@@ -110,6 +110,9 @@
                     timer = 20;
                     break;
                 default:
+                    // randomly go through all doodles
+                    // increase speed over time
+                    // add timer
                     break;
             }
             levelState++;
@@ -121,7 +124,6 @@
     CGSize s = [CCDirector sharedDirector].winSize;
     
     CCSprite* doodle = [CCSprite spriteWithFile:fileName];
-    //[[doodle texture] setAliasTexParameters];
     doodle.position = ccp(s.width / 2, s.height + doodle.contentSize.height / 2);
     [self addChild:doodle z:0 tag:1];
 }
@@ -145,7 +147,7 @@
     [self removeChild:menu cleanup:YES];
     self.isTouchEnabled = false;
     totalPlayerCount = [self getPlayerCount];
-    timer = 5;
+    timer = 1; // todo: 5
     
     state = 1;
 }
@@ -160,8 +162,8 @@
                     CCSprite* sprite = child2;
                     if (sprite.tag == 1) {
                         if ([self isCollisionBetweenSpriteA:child spriteB:sprite pixelPerfect:YES]) {
-                            //[self removeChild:child cleanup:YES];
-                            CCLOG(@"collision detected");
+                            [self removeChild:child cleanup:YES]; // todo: add this back in!
+                            //CCLOG(@"collision detected");
                         }
                     }
                 }

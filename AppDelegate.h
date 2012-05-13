@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SimpleAudioEngine.h"
 
 @class RootViewController;
 

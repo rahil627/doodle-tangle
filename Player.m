@@ -16,20 +16,15 @@
 }
 
 - (id)init :(CGPoint)position {
-	if (!(self = [super initWithFile:@"square.png"])) // todo: might need WithFile
+	if (!(self = [super initWithFile:@"circle.png"])) // todo: might need WithFile
 		return nil;
-    
-    //[[self texture] setAliasTexParameters];
     
     //self.isTouchEnabled = YES;
     
     self.position = position;
     
     // random color circle
-    //[self setTextureRect:CGRectMake(-10, -10, 20, 20)];
-    [self setColor:ccc3(CCRANDOM_0_1() * 255, CCRANDOM_0_1() * 255, CCRANDOM_0_1() * 255)];
-    
-    //self.position = position;
+    [self setColor:ccc3(CCRANDOM_0_1() * 230 + 25, CCRANDOM_0_1() * 230 + 25, CCRANDOM_0_1() * 230 + 25)];
     
     return self;
 }
@@ -75,7 +70,8 @@
         
 #pragma mark - private functions
 - (BOOL)containsTouchLocation:(UITouch *)touch {
-    return CGRectContainsPoint(self.textureRect, [self convertTouchToNodeSpaceAR:touch]);
+    CGRect r = CGRectMake(-25, -25, 50, 50);
+    return CGRectContainsPoint(r, [self convertTouchToNodeSpaceAR:touch]); //self.textureRect wasn't working correctly
 }
 
 @end
