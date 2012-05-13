@@ -31,7 +31,7 @@
     timer = 0;
     levelState = 0;
     moveSpeed = 2;
-    spawnTime = 20;
+    spawnTime = 15;
     allTimer = 0;
     
     CGSize s = [CCDirector sharedDirector].winSize;
