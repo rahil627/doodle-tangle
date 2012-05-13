@@ -24,7 +24,8 @@
 - (id) init {
 	if(!(self=[super init]))
         return nil;
-        
+    
+    [CCDirector sharedDirector].displayFPS = NO; //todo: = debugValue
     self.isTouchEnabled = YES;
     state = 0;
     timer = 0;
@@ -58,7 +59,7 @@
     levelFileNames1 = [[NSArray alloc] initWithObjects:@"Blob.png", @"TwoOpenings.png", @"TwoOpenings2.png", nil];
     levelFileNames2 = [[NSArray alloc] initWithObjects:@"OneOpening.png", @"OneOpening2.png", @"TwoToOne.png", nil];
     levelFileNames3 = [[NSArray alloc] initWithObjects:@"Curve.png", @"Curve2.png", @"Trap.png", @"SafeSpaces.png",
-                       @"Backward.png", @"Staircase.png", nil];
+                       @"Backward.png", @"Staircase.png", @"Converge.png", nil];
     
     // scores
     NSString* scoreString = [NSString stringWithFormat:@"last score: %i", [[GameManager sharedGameManager] score]];
@@ -120,15 +121,15 @@
                 case 0:
                     // do stuff
                     label.string = @"avoid the doodles"; //[NSString stringWithFormat:@"%@\r%@\r%@", @"avoid the doodles", @"work together", @"good luck"];
-                    timer += 1; // todo: 5
+                    timer += 5;
                     break;
                 case 1:
                     //label.visible = NO;
                     [self removeChild:label cleanup:YES];
-                    timer += 1; // todo: 5
+                    timer += 1;
                     break;
                 case 2:
-                    //[self addDoodle:@"Staircase.png"];
+                    //[self addDoodle:@"Trap.png"]; // test doodle here
                     [self addDoodle:[self getRandomIndex:levelFileNames1]];
                     timer += spawnTime;
                     break;
@@ -173,7 +174,7 @@
     [self removeChild:menu cleanup:YES];
     self.isTouchEnabled = false;
     totalPlayerCount = [self getPlayerCount];
-    timer = 1; // todo: 5
+    timer = 5;
     
     [self removeChild:scoreLabel cleanup:YES];
     [self removeChild:highScoreLabel cleanup:YES];
@@ -199,7 +200,7 @@
                     CCSprite* sprite = child2;
                     if (sprite.tag == 1) {
                         if ([self isCollisionBetweenSpriteA:child spriteB:sprite pixelPerfect:YES]) {
-                            [self removeChild:child cleanup:YES]; // todo: add this back in!
+                            [self removeChild:child cleanup:YES];
                             //CCLOG(@"collision detected");
                         }
                     }

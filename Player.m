@@ -16,7 +16,7 @@
 }
 
 - (id)init :(CGPoint)position {
-	if (!(self = [super initWithFile:@"circle.png"])) // todo: might need WithFile
+	if (!(self = [super initWithFile:@"circle.png"]))
 		return nil;
     
     //self.isTouchEnabled = YES;
