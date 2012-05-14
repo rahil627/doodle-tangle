@@ -94,7 +94,7 @@
     // ready state
     if (state == 0) {
         // if number of players >= 3, allow to start game
-        startButton.isEnabled = ([self getPlayerCount] >= 3);
+        startButton.isEnabled = ([self getPlayerCount] >= 1);
     }
     
     // game state
@@ -111,7 +111,7 @@
         currentScoreLabel.string = [NSString stringWithFormat:@"score: %i", allTimerInt];
         
         // if number of players < total, restart
-        if ([self getPlayerCount] < /*totalPlayerCount*/ 3) {
+        if ([self getPlayerCount] < /*totalPlayerCount*/ 1) {
             
             // set high score
             [GameManager sharedGameManager].score = allTimer;
