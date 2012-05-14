@@ -91,6 +91,8 @@
     // drag player to move
     // create enemies
     
+    // TESTING Xcode source control
+    
     // ready state
     if (state == 0) {
         // if number of players >= 3, allow to start game
